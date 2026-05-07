@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ArcadeVault — Unblocked Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --card: #16161f;
+      --border: #252535;
+      --accent: #00f5a0;
+      --accent2: #00b4ff;
+      --accent3: #ff3cac;
+      --text: #e8e8f0;
+      --muted: #666680;
+      --glow: 0 0 30px rgba(0,245,160,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,160,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,160,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Glowing orbs */
+    body::after {
+      content: '';
+      position: fixed;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,180,255,0.06) 0%, transparent 70%);
+      top: -200px; right: -200px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 0 2rem;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+    }
+
+    .logo {
+      font-family: 'Russo One', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.05em;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo span {
+      background: linear-gradient(90deg, var(--accent2), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+      letter-spacing: 0.02em;
+    }
+    nav a:hover { color: var(--text); background: var(--card); }
+
+    .badge {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      color: #000;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 5rem 2rem 3.5rem;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-family: 'Russo One', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      line-height: 1.05;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 .line2 {
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    /* Game grid */
+    .section {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-family: 'Russo One', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .game-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+    }
+
+    .game-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0,245,160,0.4);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,245,160,0.1);
+    }
+
+    .game-card:nth-child(2):hover {
+      border-color: rgba(0,180,255,0.4);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,180,255,0.1);
+    }
+    .game-card:nth-child(3):hover {
+      border-color: rgba(255,60,172,0.4);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,60,172,0.1);
+    }
+
+    .game-thumb {
+      width: 100%;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-thumb::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.15;
+    }
+
+    .thumb-solitaire { background: linear-gradient(135deg, #0d2137, #1a3a55); }
+    .thumb-solitaire::before { background: radial-gradient(circle at 30% 40%, #00f5a0, transparent 60%); }
+
+    .thumb-snaker { background: linear-gradient(135deg, #0d1f0d, #1a3a1a); }
+    .thumb-snaker::before { background: radial-gradient(circle at 60% 40%, #00b4ff, transparent 60%); }
+
+    .thumb-block { background: linear-gradient(135deg, #1f0d1f, #3a1a35); }
+    .thumb-block::before { background: radial-gradient(circle at 50% 50%, #ff3cac, transparent 60%); }
+
+    .game-emoji {
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5));
+      transition: transform 0.3s ease;
+    }
+    .game-card:hover .game-emoji { transform: scale(1.15); }
+
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .game-card:hover .play-overlay { opacity: 1; }
+
+    .play-btn-icon {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      border: 2px solid rgba(255,255,255,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      transition: transform 0.2s;
+    }
+    .play-btn-icon:hover { transform: scale(1.1); }
+
+    .game-info {
+      padding: 1.2rem 1.4rem;
+    }
+
+    .game-name {
+      font-family: 'Russo One', sans-serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.35rem;
+    }
+
+    .game-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+    }
+
+    .game-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .game-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      border: 1px solid;
+    }
+    .tag-green { color: var(--accent); border-color: rgba(0,245,160,0.3); background: rgba(0,245,160,0.08); }
+    .tag-blue  { color: var(--accent2); border-color: rgba(0,180,255,0.3); background: rgba(0,180,255,0.08); }
+    .tag-pink  { color: var(--accent3); border-color: rgba(255,60,172,0.3); background: rgba(255,60,172,0.08); }
+
+    .play-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .play-btn:hover { opacity: 0.85; transform: scale(1.03); }
+    .btn-green { background: linear-gradient(90deg, var(--accent), #00c98a); color: #000; }
+    .btn-blue  { background: linear-gradient(90deg, var(--accent2), #0090d0); color: #000; }
+    .btn-pink  { background: linear-gradient(90deg, var(--accent3), #d0008e); color: #fff; }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    footer span { color: var(--accent); }
+
+    /* Scroll animation */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .game-card {
+      animation: fadeUp 0.5s ease both;
+    }
+    .game-card:nth-child(1) { animation-delay: 0.1s; }
+    .game-card:nth-child(2) { animation-delay: 0.2s; }
+    .game-card:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes heroIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero { animation: heroIn 0.7s ease both; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Arcade<span>Vault</span></div>
+    <nav>
+      <a href="#">All Games</a>
+      <a href="#">Popular</a>
+      <a href="#">New</a>
+    </nav>
+    <div class="badge">UNBLOCKED</div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-eyebrow">🎮 Play anywhere, anytime</div>
+    <h1>
+      Free Games.<br>
+      <span class="line2">No Limits. Zero Ads.</span>
+    </h1>
+    <p>Jump into classic and modern games — all unblocked, no downloads required.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Featured Games</div>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="games-grid">
+
+      <!-- Solitaire -->
+      <div class="game-card" onclick="openGame('Solitaire', 'https://cloud.onlinegames.io/games/2025/html/solitaire/index-og.html')">
+        <div class="game-thumb thumb-solitaire">
+          <div class="game-emoji">🃏</div>
+          <div class="play-overlay"><div class="play-btn-icon">▶</div></div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Solitaire</div>
+          <div class="game-desc">The timeless card game. Stack suits, clear the board, and beat your best time.</div>
+          <div class="game-meta">
+            <span class="game-tag tag-green">Card Game</span>
+            <button class="play-btn btn-green" onclick="event.stopPropagation(); openGame('Solitaire', 'https://cloud.onlinegames.io/games/2025/html/solitaire/index-og.html')">Play Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Snaker.io -->
+      <div class="game-card" onclick="openGame('Snaker.io', 'https://cloud.onlinegames.io/games/2026/more/snaker-io/game.html')">
+        <div class="game-thumb thumb-snaker">
+          <div class="game-emoji">🐍</div>
+          <div class="play-overlay"><div class="play-btn-icon">▶</div></div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Snaker.io</div>
+          <div class="game-desc">Slither and grow — outsmart other snakes, collect orbs, and dominate the arena.</div>
+          <div class="game-meta">
+            <span class="game-tag tag-blue">Multiplayer</span>
+            <button class="play-btn btn-blue" onclick="event.stopPropagation(); openGame('Snaker.io', 'https://cloud.onlinegames.io/games/2026/more/snaker-io/game.html')">Play Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block Blast -->
+      <div class="game-card" onclick="openGame('Block Blast', 'https://cloud.onlinegames.io/games/2024/unity3/block-blast/index-og.html')">
+        <div class="game-thumb thumb-block">
+          <div class="game-emoji">🟪</div>
+          <div class="play-overlay"><div class="play-btn-icon">▶</div></div>
+        </div>
+        <div class="game-info">
+          <div class="game-name">Block Blast</div>
+          <div class="game-desc">Drop blocks, clear lines, and chase high scores in this addictive puzzle game.</div>
+          <div class="game-meta">
+            <span class="game-tag tag-pink">Puzzle</span>
+            <button class="play-btn btn-pink" onclick="event.stopPropagation(); openGame('Block Blast', 'https://cloud.onlinegames.io/games/2024/unity3/block-blast/index-og.html')">Play Now</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    Made with ❤️ &mdash; <span>ArcadeVault</span> &mdash; All games are unblocked &amp; free to play.
+  </footer>
+
+  <!-- Toast notification -->
+  <div id="toast" style="
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    z-index: 9999;
+    white-space: nowrap;
+  "></div>
+
+  <script>
+    function openGame(name, src) {
+      window.open(src, '_blank', 'noopener,noreferrer');
+      showToast('🎮 Launching ' + name + ' in a new tab...');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateX(-50%) translateY(0)';
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(20px)';
+      }, 2800);
+    }
+  </script>
+</body>
+</html>
